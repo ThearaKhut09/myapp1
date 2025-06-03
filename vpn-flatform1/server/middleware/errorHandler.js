@@ -118,11 +118,9 @@ class ErrorHandler {
                 }
             });
         };
-    }
-
-    // Format error for response
+    }    // Format error for response
     formatError(err) {
-        let status = err.status || 500;
+        let status = err.status || err.statusCode || 500;
         let code = err.code || 1501;
         let message = err.message || 'Internal server error';
         let type = err.name || 'INTERNAL_ERROR';
