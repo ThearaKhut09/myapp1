@@ -3,24 +3,40 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
-// Add database manager for auth
-const dbManager = require('./database/manager');
+console.log('Starting server...');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+async function startServer() {
+    try {
+        // Initialize database first
+        console.log('Initializing database...');
+        const dbManager = require('./database/manager_hybrid');
+        
+        // Wait for database to be ready
+        let retries = 0;
+        while (!dbManager.isConnected && retries < 10) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            retries++;
+        }
+        
+        if (!dbManager.isConnected) {
+            throw new Error('Database failed to initialize after 10 seconds');
+        }
+        
+        const app = express();
+        const PORT = process.env.PORT || 3000;
 
-// Basic middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../client')));
-app.use('/public', express.static(path.join(__dirname, '../client/public')));
-app.use('/scr', express.static(path.join(__dirname, '../client/scr')));
+        // Basic middleware
+        app.use(cors());
+        app.use(express.json());
+        app.use(express.static(path.join(__dirname, '../client')));
+        app.use('/public', express.static(path.join(__dirname, '../client/public')));
+        app.use('/scr', express.static(path.join(__dirname, '../client/scr')));
 
-// Add auth routes
-const authRoutes = require('./routes/auth');
-app.use('/api', authRoutes);
+        // Add auth routes
+        const authRoutes = require('./routes/auth');
+        app.use('/api', authRoutes);
 
-// HTML page routes
+        // HTML page routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/public/index.html'));
 });

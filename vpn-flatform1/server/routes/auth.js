@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const validator = require('validator');
 const crypto = require('crypto');
-const dbManager = require('../database/manager');
+const dbManager = require('../database/manager_hybrid');
 
 const router = express.Router();
 
