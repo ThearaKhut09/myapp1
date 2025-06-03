@@ -9,7 +9,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Enhanced middleware and services
-const logger = require('./middleware/logger');
+const { Logger, requestLogger } = require('./middleware/logger');
 const security = require('./middleware/security');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -19,7 +19,7 @@ const { getDatabase } = require('./database/connection');
 
 // Services
 const { WebSocketService } = require('./services/websocket');
-const analytics = require('./services/analytics');
+const { AnalyticsService, analyticsMiddleware } = require('./services/analytics');
 const connectionMonitor = require('./services/connectionMonitor');
 const notifications = require('./services/notifications');
 const backup = require('./services/backup');
@@ -34,6 +34,12 @@ const adminRoutes = require('./routes/admin');
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
+
+// Initialize analytics service instance
+const analytics = new AnalyticsService();
+
+// Initialize logger instance
+const logger = new Logger();
 
 // Initialize services
 async function initializeServices() {
@@ -110,7 +116,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.json({ limit: '10mb' }));
 
 // Analytics tracking middleware
-app.use(analytics.middleware());
+app.use(analyticsMiddleware(analytics));
 
 // Request ID middleware for tracking
 app.use((req, res, next) => {

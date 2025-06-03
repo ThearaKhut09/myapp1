@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const validator = require('validator');
 const crypto = require('crypto');
+const dbManager = require('../database/manager');
 
 const router = express.Router();
 
-// In-memory storage (replace with actual database in production)
-const users = new Map();
+// In-memory storage for tokens (can be moved to database in production)
 const refreshTokens = new Set();
 const emailVerificationTokens = new Map();
 
@@ -98,41 +98,60 @@ router.post('/register', authLimiter, async (req, res) => {
             return res.status(400).json({ error: 'Passwords do not match' });
         }
 
-        // Check if user already exists
-        const existingUser = Array.from(users.values()).find(
-            user => user.email === email || user.username === username
+        // Check if user already exists in database
+        const existingUserByEmail = await dbManager.get(
+            'SELECT id FROM users WHERE email = ?', 
+            [email.toLowerCase().trim()]
+        );
+        
+        const existingUserByUsername = await dbManager.get(
+            'SELECT id FROM users WHERE username = ?', 
+            [username.trim()]
         );
 
-        if (existingUser) {
+        if (existingUserByEmail) {
             return res.status(409).json({ 
                 error: 'User already exists',
-                details: existingUser.email === email ? 'Email already registered' : 'Username already taken'
+                details: 'Email already registered'
             });
         }
 
-        // Hash password
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        if (existingUserByUsername) {
+            return res.status(409).json({ 
+                error: 'User already exists',
+                details: 'Username already taken'
+            });
+        }
 
-        // Generate user ID and verification token
-        const userId = crypto.randomUUID();
+        // Hash password with salt
+        const salt = crypto.randomBytes(16).toString('hex');
+        const saltedPassword = password + salt;
+        const hashedPassword = await bcrypt.hash(saltedPassword, 12);
+
+        // Generate verification token
         const verificationToken = crypto.randomBytes(32).toString('hex');
 
-        // Create user object
-        const newUser = {
-            id: userId,
-            username: username.trim(),
-            email: email.toLowerCase().trim(),
-            password: hashedPassword,
-            isVerified: false,
-            createdAt: new Date().toISOString(),
-            subscriptionType: 'free',
-            subscriptionExpiry: null
-        };
+        // Create user in database
+        const result = await dbManager.run(
+            `INSERT INTO users 
+             (username, email, password_hash, salt, status, created_at, updated_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                username.trim(),
+                email.toLowerCase().trim(),
+                hashedPassword,
+                salt,
+                'active',
+                new Date().toISOString(),
+                new Date().toISOString()
+            ]
+        );
 
-        // Store user and verification token
-        users.set(userId, newUser);
-        emailVerificationTokens.set(verificationToken, { userId, expiresAt: Date.now() + 24 * 60 * 60 * 1000 }); // 24h expiry
+        // Store verification token
+        emailVerificationTokens.set(verificationToken, { 
+            userId: result.id, 
+            expiresAt: Date.now() + 24 * 60 * 60 * 1000 
+        });
 
         // TODO: Send verification email
         console.log(`Verification token for ${email}: ${verificationToken}`);
@@ -140,10 +159,10 @@ router.post('/register', authLimiter, async (req, res) => {
         res.status(201).json({
             message: 'User registered successfully',
             data: {
-                userId,
-                username: newUser.username,
-                email: newUser.email,
-                isVerified: newUser.isVerified
+                userId: result.id,
+                username: username.trim(),
+                email: email.toLowerCase().trim(),
+                isVerified: false
             }
         });
 
@@ -168,15 +187,19 @@ router.post('/login', authLimiter, async (req, res) => {
             });
         }
 
-        // Find user by email
-        const user = Array.from(users.values()).find(u => u.email === email.toLowerCase().trim());
+        // Find user by email in database
+        const user = await dbManager.get(
+            'SELECT * FROM users WHERE email = ?', 
+            [email.toLowerCase().trim()]
+        );
 
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        // Verify password
-        const isValidPassword = await bcrypt.compare(password, user.password);
+        // Verify password using salt and password_hash
+        const saltedPassword = password + user.salt;
+        const isValidPassword = await bcrypt.compare(saltedPassword, user.password_hash);
 
         if (!isValidPassword) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -186,8 +209,11 @@ router.post('/login', authLimiter, async (req, res) => {
         const { accessToken, refreshToken } = generateTokens(user.id, user.email);
         refreshTokens.add(refreshToken);
 
-        // Update last login
-        user.lastLogin = new Date().toISOString();
+        // Update last login in database
+        await dbManager.run(
+            'UPDATE users SET last_login = ? WHERE id = ?', 
+            [new Date().toISOString(), user.id]
+        );
 
         res.json({
             message: 'Login successful',
@@ -196,9 +222,8 @@ router.post('/login', authLimiter, async (req, res) => {
                     id: user.id,
                     username: user.username,
                     email: user.email,
-                    isVerified: user.isVerified,
-                    subscriptionType: user.subscriptionType,
-                    subscriptionExpiry: user.subscriptionExpiry
+                    role: user.role,
+                    status: user.status
                 },
                 accessToken,
                 refreshToken

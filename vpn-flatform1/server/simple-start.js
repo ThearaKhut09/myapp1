@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 
+// Add database manager for auth
+const dbManager = require('./database/manager');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -12,6 +15,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../client')));
 app.use('/public', express.static(path.join(__dirname, '../client/public')));
 app.use('/scr', express.static(path.join(__dirname, '../client/scr')));
+
+// Add auth routes
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
 
 // HTML page routes
 app.get('/', (req, res) => {
