@@ -149,6 +149,19 @@ process.on('unhandledRejection', (reason, promise) => {
 // Increase timeout for async operations
 jest.setTimeout(30000);
 
+// Mock authentication middleware
+jest.mock('../server/routes/auth', () => ({
+  authenticateToken: jest.fn((req, res, next) => {
+    req.user = {
+      userId: 'test-user-id',
+      email: 'test@example.com',
+      role: 'admin',
+      username: 'testuser'
+    };
+    next();
+  })
+}));
+
 // Mock external services that shouldn't be called during testing
 jest.mock('nodemailer', () => ({
   createTransport: jest.fn(() => ({
@@ -166,4 +179,29 @@ jest.mock('fs', () => ({
   statSync: jest.fn().mockReturnValue({ isDirectory: () => false, size: 1024 }),
   readdirSync: jest.fn().mockReturnValue([]),
   unlinkSync: jest.fn().mockReturnValue(undefined),
-  promises: 
+  promises: {
+    readFile: jest.fn().mockResolvedValue('mock file content'),
+    writeFile: jest.fn().mockResolvedValue(undefined),
+    appendFile: jest.fn().mockResolvedValue(undefined),
+    unlink: jest.fn().mockResolvedValue(undefined),
+    readdir: jest.fn().mockResolvedValue([]),
+    stat: jest.fn().mockResolvedValue({ isDirectory: () => false, size: 1024 }),
+    mkdir: jest.fn().mockResolvedValue(undefined)
+  }
+}));
+
+// Mock Redis if not available
+jest.mock('redis', () => ({
+  createClient: jest.fn(() => ({
+    connect: jest.fn().mockResolvedValue(),
+    disconnect: jest.fn().mockResolvedValue(),
+    set: jest.fn().mockResolvedValue('OK'),
+    get: jest.fn().mockResolvedValue(null),
+    del: jest.fn().mockResolvedValue(1),
+    exists: jest.fn().mockResolvedValue(0),
+    expire: jest.fn().mockResolvedValue(1),
+    flushall: jest.fn().mockResolvedValue('OK')
+  }))
+}));
+
+console.log('🧪 Jest test environment initialized');
