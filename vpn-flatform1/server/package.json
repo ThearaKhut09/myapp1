@@ -1,0 +1,41 @@
+{
+  "name": "vpn-platform-server",
+  "version": "1.0.0",
+  "description": "VPN Platform Server with USDT payments and multi-protocol support",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vpn",
+    "xboard",
+    "v2bx",
+    "wireguard",
+    "udp2raw",
+    "usdt",
+    "crypto",
+    "payment"
+  ],
+  "author": "VPN Platform Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

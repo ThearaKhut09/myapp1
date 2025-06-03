@@ -1,0 +1,32 @@
+{
+  "name": "vpn-platform-client",
+  "version": "1.0.0",
+  "description": "VPN Platform Client Application",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "live-server public/",
+    "dev": "live-server public/ --watch=scr/",
+    "build": "echo 'Build process not configured yet'",
+    "test": "echo 'No tests specified yet'"
+  },
+  "keywords": [
+    "vpn",
+    "security",
+    "privacy",
+    "web-app"
+  ],
+  "author": "VPN Platform Team",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vpn-platform/vpn-platform.git"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

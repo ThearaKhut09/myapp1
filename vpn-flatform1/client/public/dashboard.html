@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SecureVPN</title>
+    <link rel="stylesheet" href="../scr/css/styles.css">
+    <link rel="stylesheet" href="../scr/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SecureVPN</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#overview" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#servers" class="nav-link">Servers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#account" class="nav-link">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#support" class="nav-link">Support</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">John Doe</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#profile">Profile Settings</a></li>
+                        <li><a href="#billing">Billing</a></li>
+                        <li><a href="#downloads">Downloads</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Content -->
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Connection Status -->
+            <section class="connection-section">
+                <div class="connection-card">
+                    <div class="connection-status" id="connectionStatus">
+                        <div class="status-indicator disconnected" id="statusIndicator">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="status-info">
+                            <h2 id="statusTitle">Disconnected</h2>
+                            <p id="statusSubtitle">Click to connect to the nearest server</p>
+                        </div>
+                        <button class="connect-btn" id="connectBtn">
+                            <span class="btn-text">Connect</span>
+                            <div class="btn-loader" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="connection-details" id="connectionDetails" style="display: none;">
+                        <div class="detail-item">
+                            <span class="label">Server:</span>
+                            <span class="value" id="currentServer">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Protocol:</span>
+                            <span class="value" id="currentProtocol">OpenVPN</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">IP Address:</span>
+                            <span class="value" id="currentIP">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Connected Time:</span>
+                            <span class="value" id="connectedTime">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Stats -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="downloadSpeed">0 MB/s</h3>
+                            <p>Download Speed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="uploadSpeed">0 MB/s</h3>
+                            <p>Upload Speed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="dataUsage">0 GB</h3>
+                            <p>Data Used Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="sessionTime">0m</h3>
+                            <p>Session Time</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Server Selection -->
+            <section class="servers-section" id="servers">
+                <div class="section-header">
+                    <h2>Available Servers</h2>
+                    <div class="server-controls">
+                        <button class="btn-secondary" id="refreshServers">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                        <select class="server-filter" id="serverFilter">
+                            <option value="all">All Regions</option>
+                            <option value="americas">Americas</option>
+                            <option value="europe">Europe</option>
+                            <option value="asia">Asia Pacific</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="servers-grid" id="serversGrid">
+                    <!-- Servers will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Account Overview -->
+            <section class="account-section" id="account">
+                <div class="section-header">
+                    <h2>Account Overview</h2>
+                </div>
+                
+                <div class="account-grid">
+                    <div class="account-card subscription-card">
+                        <div class="card-header">
+                            <h3>Current Plan</h3>
+                            <span class="plan-badge premium">Premium</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="plan-info">
+                                <p class="plan-name">Premium Annual</p>
+                                <p class="plan-price">$99.99/year</p>
+                            </div>
+                            <div class="plan-features">
+                                <div class="feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>Unlimited bandwidth</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>10 simultaneous connections</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-check"></i>
+                                    <span>All premium servers</span>
+                                </div>
+                            </div>
+                            <div class="plan-renewal">
+                                <p>Renews on: <span id="renewalDate">March 15, 2026</span></p>
+                                <div class="renewal-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%"></div>
+                                    </div>
+                                    <span class="progress-text">288 days remaining</span>
+                                </div>
+                            </div>
+                            <button class="btn-primary">Manage Subscription</button>
+                        </div>
+                    </div>
+                    
+                    <div class="account-card devices-card">
+                        <div class="card-header">
+                            <h3>Connected Devices</h3>
+                            <span class="device-count">3/10</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="device-list">
+                                <div class="device-item">
+                                    <div class="device-icon">
+                                        <i class="fas fa-laptop"></i>
+                                    </div>
+                                    <div class="device-info">
+                                        <h4>MacBook Pro</h4>
+                                        <p>Active now</p>
+                                    </div>
+                                    <button class="device-action">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="device-item">
+                                    <div class="device-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="device-info">
+                                        <h4>iPhone 14</h4>
+                                        <p>Last seen 2 hours ago</p>
+                                    </div>
+                                    <button class="device-action">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="device-item">
+                                    <div class="device-icon">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </div>
+                                    <div class="device-info">
+                                        <h4>iPad Air</h4>
+                                        <p>Last seen yesterday</p>
+                                    </div>
+                                    <button class="device-action">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn-secondary full-width">Add New Device</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="actions-section">
+                <div class="section-header">
+                    <h2>Quick Actions</h2>
+                </div>
+                
+                <div class="actions-grid">
+                    <div class="action-card">
+                        <i class="fas fa-download"></i>
+                        <h3>Download Apps</h3>
+                        <p>Get VPN apps for all your devices</p>
+                        <button class="btn-outline">Download</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>Settings</h3>
+                        <p>Configure VPN protocols and preferences</p>
+                        <button class="btn-outline">Configure</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>Support</h3>
+                        <p>Get help from our 24/7 support team</p>
+                        <button class="btn-outline">Contact</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Usage Stats</h3>
+                        <p>View detailed usage analytics</p>
+                        <button class="btn-outline">View Stats</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../scr/js/main.js"></script>
+    <script src="../scr/js/dashboard.js"></script>
+    <script src="../scr/js/auth.js"></script>
+</body>
+</html>

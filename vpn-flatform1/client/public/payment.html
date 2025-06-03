@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - SecureVPN</title>
+    <link rel="stylesheet" href="../scr/css/styles.css">
+    <link rel="stylesheet" href="../scr/css/payment.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar payment-navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SecureVPN</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Payment Form -->
+    <main class="payment-main">
+        <div class="payment-container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h1>Complete Your Purchase</h1>
+                    <p>Secure payment powered by blockchain technology</p>
+                </div>
+
+                <!-- Plan Summary -->
+                <div class="plan-summary" id="planSummary">
+                    <div class="summary-header">
+                        <h3>Order Summary</h3>
+                    </div>
+                    <div class="summary-content">
+                        <div class="plan-details">
+                            <div class="plan-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="plan-info">
+                                <h4 id="selectedPlan">Premium Annual Plan</h4>
+                                <p id="planFeatures">Unlimited bandwidth • 10 devices • 100+ servers</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pricing-breakdown">
+                            <div class="price-item">
+                                <span>Subtotal:</span>
+                                <span id="subtotal">$99.99</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Discount:</span>
+                                <span id="discount" class="discount-amount">-$20.00</span>
+                            </div>
+                            <div class="price-item total">
+                                <span>Total:</span>
+                                <span id="totalAmount">$79.99</span>
+                            </div>
+                        </div>
+                        
+                        <div class="promo-code">
+                            <input type="text" id="promoInput" placeholder="Enter promo code">
+                            <button type="button" id="applyPromo" class="btn-secondary">Apply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h3>Choose Payment Method</h3>
+                    
+                    <div class="payment-options">
+                        <div class="payment-option active" data-method="usdt">
+                            <div class="option-header">
+                                <div class="option-icon">
+                                    <i class="fab fa-bitcoin"></i>
+                                </div>
+                                <div class="option-info">
+                                    <h4>USDT (Tether)</h4>
+                                    <p>Pay with cryptocurrency - Most secure & anonymous</p>
+                                </div>
+                                <div class="option-badge">
+                                    <span>5% Discount</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-option" data-method="card">
+                            <div class="option-header">
+                                <div class="option-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="option-info">
+                                    <h4>Credit/Debit Card</h4>
+                                    <p>Visa, Mastercard, American Express</p>
+                                </div>
+                                <div class="option-badge">
+                                    <span>Instant</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-option" data-method="paypal">
+                            <div class="option-header">
+                                <div class="option-icon">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="option-info">
+                                    <h4>PayPal</h4>
+                                    <p>Pay with your PayPal account</p>
+                                </div>
+                                <div class="option-badge">
+                                    <span>Secure</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USDT Payment Form -->
+                <div class="payment-form usdt-form active" id="usdtForm">
+                    <div class="crypto-info">
+                        <div class="wallet-address">
+                            <label>Send USDT (TRC-20) to this address:</label>
+                            <div class="address-container">
+                                <input type="text" id="walletAddress" value="TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t" readonly>
+                                <button type="button" id="copyAddress" class="copy-btn">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="amount-info">
+                            <div class="amount-display">
+                                <span class="amount-label">Amount to send:</span>
+                                <span class="amount-value" id="usdtAmount">75.99 USDT</span>
+                            </div>
+                            <div class="qr-code" id="qrCode">
+                                <div class="qr-placeholder">
+                                    <i class="fas fa-qrcode"></i>
+                                    <p>QR Code will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="transaction-verify">
+                        <h4>After sending, verify your payment:</h4>
+                        <div class="verify-form">
+                            <div class="form-group">
+                                <label for="txHash">Transaction Hash (TxID):</label>
+                                <input type="text" id="txHash" placeholder="Enter transaction hash">
+                            </div>
+                            <button type="button" id="verifyPayment" class="btn-primary">
+                                <span class="btn-text">Verify Payment</span>
+                                <div class="btn-loader" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Payment Form -->
+                <div class="payment-form card-form" id="cardForm">
+                    <form class="card-details">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date</label>
+                                <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name</label>
+                            <input type="text" id="cardName" placeholder="John Doe">
+                        </div>
+                        
+                        <button type="submit" class="btn-primary full-width">
+                            <i class="fas fa-lock"></i>
+                            Pay $79.99
+                        </button>
+                    </form>
+                </div>
+
+                <!-- PayPal Payment Form -->
+                <div class="payment-form paypal-form" id="paypalForm">
+                    <div class="paypal-container">
+                        <div class="paypal-info">
+                            <i class="fab fa-paypal"></i>
+                            <p>You will be redirected to PayPal to complete your payment</p>
+                        </div>
+                        <button type="button" id="paypalBtn" class="btn-primary paypal-btn">
+                            <i class="fab fa-paypal"></i>
+                            Continue with PayPal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Security Features -->
+                <div class="security-features">
+                    <div class="security-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>256-bit SSL encryption</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-user-shield"></i>
+                        <span>No personal data stored</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-lock"></i>
+                        <span>PCI DSS compliant</span>
+                    </div>
+                    <div class="security-item">
+                        <i class="fas fa-undo"></i>
+                        <span>30-day money back guarantee</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Timeline -->
+            <div class="order-timeline">
+                <h3>What happens next?</h3>
+                <div class="timeline-steps">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Complete Payment</h4>
+                            <p>Choose your preferred payment method</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Account Activation</h4>
+                            <p>Your account will be activated instantly</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Download & Connect</h4>
+                            <p>Download our apps and start browsing securely</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="support-info">
+                    <h4>Need Help?</h4>
+                    <p>Our support team is available 24/7</p>
+                    <div class="support-contacts">
+                        <a href="#" class="support-link">
+                            <i class="fas fa-comments"></i>
+                            Live Chat
+                        </a>
+                        <a href="mailto:support@securevpn.com" class="support-link">
+                            <i class="fas fa-envelope"></i>
+                            Email Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Success Modal -->
+    <div class="modal" id="successModal" style="display: none;">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Payment Successful!</h2>
+            <p>Your SecureVPN subscription has been activated.</p>
+            <div class="modal-actions">
+                <button class="btn-primary" onclick="window.location.href='dashboard.html'">
+                    Go to Dashboard
+                </button>
+                <button class="btn-secondary" onclick="window.location.href='index.html'">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scr/js/payment.js"></script>
+    <script src="../scr/js/api.js"></script>
+</body>
+</html>

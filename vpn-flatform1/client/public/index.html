@@ -1,0 +1,820 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureVPN - Your Privacy, Our Priority</title>
+    <meta name="description" content="Secure VPN service with global servers, USDT payments, and multi-protocol support. Fast, private, and reliable.">
+    <meta name="keywords" content="VPN, secure, privacy, USDT, XBorad, V2bx, WireGuard, udp2raw">
+    <link rel="stylesheet" href="../scr/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Enhanced animations and effects */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .language-selector {
+            position: relative;
+        }
+        
+        .language-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            min-width: 150px;
+        }
+        
+        .language-selector:hover .language-dropdown {
+            display: block;
+        }
+        
+        .language-dropdown a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .language-dropdown a:hover {
+            background-color: var(--bg-light);
+        }
+        
+        /* Enhanced button styles */
+        .btn-enhanced {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-enhanced:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-enhanced:hover:before {
+            left: 100%;
+        }
+        
+        /* Loading states */
+        .loading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        .loading:after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 10px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile responsiveness improvements */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SecureVPN</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#features" class="nav-link">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#servers" class="nav-link">Servers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#support" class="nav-link">Support</a>
+                </li>
+                <li class="nav-item">
+                    <a href="login.html" class="nav-link btn-login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="register.html" class="nav-link btn-register">Get Started</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Your Privacy, <span class="highlight">Secured</span>
+                </h1>
+                <p class="hero-description">
+                    Experience the internet without boundaries. Our premium VPN service offers blazing-fast speeds, 
+                    military-grade encryption, and global server access to protect your digital life.
+                </p>
+                <div class="hero-buttons">
+                    <a href="register.html" class="btn btn-primary">Start Free Trial</a>
+                    <a href="#features" class="btn btn-secondary">Learn More</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Global Servers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Happy Users</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-graphic">
+                    <div class="shield-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="connection-lines"></div>
+                </div>
+            </div>
+        </div>
+    </section>    <!-- Enhanced Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose SecureVPN?</h2>
+                <p class="section-description">
+                    Advanced security features with multi-protocol support and global connectivity
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Protocol Support</h3>
+                    <p class="feature-description">
+                        Full support for XBorad, V2bx, WireGuard, and udp2raw protocols for maximum compatibility
+                    </p>
+                </div>
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe-asia"></i>
+                    </div>
+                    <h3 class="feature-title">Global Server Network</h3>
+                    <p class="feature-description">
+                        Connect to high-speed servers in Singapore, Japan, Europe, and more locations worldwide
+                    </p>
+                </div>
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fab fa-bitcoin"></i>
+                    </div>
+                    <h3 class="feature-title">USDT Payments</h3>
+                    <p class="feature-description">
+                        Fast, secure, and private cryptocurrency payments with USDT for complete anonymity
+                    </p>
+                </div>
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">
+                        Optimized servers deliver blazing-fast speeds without compromising your security
+                    </p>
+                </div>
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3 class="feature-title">Multi-Platform Apps</h3>
+                    <p class="feature-description">
+                        Clash, Singbox, and native clients for Windows, macOS, iOS, and Android devices
+                    </p>
+                </div>
+                <div class="feature-card card-hover">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">24/7 Support</h3>
+                    <p class="feature-description">
+                        Round-the-clock technical support to help you with setup and troubleshooting
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section><!-- Enhanced Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Choose Your Plan</h2>
+                <p class="section-description">
+                    Flexible pricing options with USDT payments and multi-protocol support
+                </p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card card-hover">
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Basic Plan</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">5</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 1 Device connection</li>
+                        <li><i class="fas fa-check"></i> 3 Server locations</li>
+                        <li><i class="fas fa-check"></i> 10GB Bandwidth</li>
+                        <li><i class="fas fa-check"></i> XBorad & V2bx support</li>
+                        <li><i class="fas fa-check"></i> USDT payments</li>
+                    </ul>
+                    <button onclick="initiatePayment('basic')" class="btn btn-enhanced">Choose Basic</button>
+                </div>
+                
+                <div class="pricing-card featured card-hover">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Pro Plan</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">10</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <div class="pricing-save">Best Value</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 3 Device connections</li>
+                        <li><i class="fas fa-check"></i> 5 Server locations</li>
+                        <li><i class="fas fa-check"></i> Unlimited bandwidth</li>
+                        <li><i class="fas fa-check"></i> All protocols (XBorad, V2bx, WireGuard)</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                    </ul>
+                    <button onclick="initiatePayment('pro')" class="btn btn-primary">Choose Pro</button>
+                </div>
+                
+                <div class="pricing-card card-hover">
+                    <div class="pricing-header">
+                        <h3 class="pricing-title">Premium Plan</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">20</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 5 Device connections</li>
+                        <li><i class="fas fa-check"></i> 8+ Server locations</li>
+                        <li><i class="fas fa-check"></i> Unlimited bandwidth</li>
+                        <li><i class="fas fa-check"></i> All protocols + udp2raw</li>
+                        <li><i class="fas fa-check"></i> Dedicated IP option</li>
+                    </ul>
+                    <button onclick="initiatePayment('premium')" class="btn btn-enhanced">Choose Premium</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servers Section -->
+    <section id="servers" class="servers">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Global Server Network</h2>
+                <p class="section-description">
+                    Connect to high-speed servers worldwide
+                </p>
+            </div>
+            <div class="servers-grid">
+                <div class="server-card">
+                    <div class="server-flag">🇺🇸</div>
+                    <h3 class="server-country">United States</h3>
+                    <p class="server-locations">15 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+                <div class="server-card">
+                    <div class="server-flag">🇬🇧</div>
+                    <h3 class="server-country">United Kingdom</h3>
+                    <p class="server-locations">8 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+                <div class="server-card">
+                    <div class="server-flag">🇩🇪</div>
+                    <h3 class="server-country">Germany</h3>
+                    <p class="server-locations">6 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+                <div class="server-card">
+                    <div class="server-flag">🇯🇵</div>
+                    <h3 class="server-country">Japan</h3>
+                    <p class="server-locations">5 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+                <div class="server-card">
+                    <div class="server-flag">🇸🇬</div>
+                    <h3 class="server-country">Singapore</h3>
+                    <p class="server-locations">4 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+                <div class="server-card">
+                    <div class="server-flag">🇦🇺</div>
+                    <h3 class="server-country">Australia</h3>
+                    <p class="server-locations">3 locations</p>
+                    <div class="server-status online">Online</div>
+                </div>
+            </div>
+        </div>
+    </section>    <!-- Enhanced Download Section -->
+    <section class="download">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Download Our Apps</h2>
+                <p class="section-description">
+                    Get SecureVPN clients for all your devices with full protocol support
+                </p>
+            </div>
+            <div class="download-grid">
+                <div class="download-card card-hover">
+                    <i class="fab fa-windows"></i>
+                    <h3>Windows</h3>
+                    <p>Clash Client with XBorad & V2bx support</p>
+                    <a href="#" class="btn btn-outline download-btn" data-platform="windows">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+                <div class="download-card card-hover">
+                    <i class="fab fa-apple"></i>
+                    <h3>macOS</h3>
+                    <p>Singbox Client with WireGuard support</p>
+                    <a href="#" class="btn btn-outline download-btn" data-platform="macos">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+                <div class="download-card card-hover">
+                    <i class="fab fa-android"></i>
+                    <h3>Android</h3>
+                    <p>Native app with all protocols</p>
+                    <a href="#" class="btn btn-outline download-btn" data-platform="android">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+                <div class="download-card card-hover">
+                    <i class="fab fa-app-store-ios"></i>
+                    <h3>iOS</h3>
+                    <p>App Store compatible client</p>
+                    <a href="#" class="btn btn-outline download-btn" data-platform="ios">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            
+            </div>
+            
+            <!-- Protocol Information -->
+            <div class="protocol-info" style="margin-top: 3rem; text-align: center;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Supported Protocols</h3>
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem;">
+                    <div class="protocol-item">
+                        <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;"></i>
+                        <p><strong>XBorad</strong><br>Advanced proxy protocol</p>
+                    </div>
+                    <div class="protocol-item">
+                        <i class="fas fa-network-wired" style="font-size: 2rem; color: var(--secondary-color); margin-bottom: 0.5rem;"></i>
+                        <p><strong>V2bx</strong><br>High-performance protocol</p>
+                    </div>
+                    <div class="protocol-item">
+                        <i class="fas fa-bolt" style="font-size: 2rem; color: var(--accent-color); margin-bottom: 0.5rem;"></i>
+                        <p><strong>WireGuard</strong><br>Modern VPN protocol</p>
+                    </div>
+                    <div class="protocol-item">
+                        <i class="fas fa-satellite-dish" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 0.5rem;"></i>
+                        <p><strong>udp2raw</strong><br>UDP tunnel over TCP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>SecureVPN</span>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted partner for online privacy and security. 
+                        Protecting millions of users worldwide.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-reddit"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#servers">Servers</a></li>
+                        <li><a href="#">Apps</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#support">Help Center</a></li>
+                        <li><a href="#">Setup Guides</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Live Chat</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SecureVPN. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>    <!-- Enhanced JavaScript -->
+    <script>
+        // Enhanced payment integration with loading states and error handling
+        async function initiatePayment(plan) {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            // Add loading state
+            button.classList.add('loading');
+            button.textContent = 'Processing...';
+            button.disabled = true;
+            
+            try {
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Show success message with proper template literal
+                showNotification(`Initiating USDT payment for ${plan} plan. Please integrate with NowPayments or TRC20 API.`, 'success');
+                
+                // TODO: Replace with actual API call
+                // const response = await fetch('/api/payment/initiate', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ plan, currency: 'USDT' })
+                // });
+                
+            } catch (error) {
+                showNotification('Payment initialization failed. Please try again.', 'error');
+                console.error('Payment error:', error);
+            } finally {
+                // Reset button state
+                button.classList.remove('loading');
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        // Enhanced form submission with validation and loading states
+        function setupFormHandlers() {
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const button = e.target.querySelector('button[type="submit"]');
+                    const formData = new FormData(e.target);
+                    
+                    // Basic validation
+                    const email = formData.get('email') || e.target.querySelector('input[type="email"]').value;
+                    const password = formData.get('password') || e.target.querySelector('input[type="password"]').value;
+                    const username = e.target.querySelector('input[type="text"]').value;
+                    
+                    if (!email || !password || !username) {
+                        showNotification('Please fill in all fields.', 'error');
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        showNotification('Password must be at least 6 characters long.', 'error');
+                        return;
+                    }
+                    
+                    // Add loading state
+                    button.classList.add('loading');
+                    button.disabled = true;
+                    
+                    try {
+                        // Simulate API call
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        showNotification('Registration submitted successfully! Please check your email for verification.', 'success');
+                        
+                        // TODO: Replace with actual API call
+                        // const response = await fetch('/api/auth/register', {
+                        //     method: 'POST',
+                        //     headers: { 'Content-Type': 'application/json' },
+                        //     body: JSON.stringify({ username, email, password })
+                        // });
+                        
+                    } catch (error) {
+                        showNotification('Registration failed. Please try again.', 'error');
+                        console.error('Registration error:', error);
+                    } finally {
+                        button.classList.remove('loading');
+                        button.disabled = false;
+                    }
+                });
+            }
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const button = e.target.querySelector('button[type="submit"]');
+                    const email = e.target.querySelector('input[type="email"]').value;
+                    const password = e.target.querySelector('input[type="password"]').value;
+                    
+                    if (!email || !password) {
+                        showNotification('Please fill in all fields.', 'error');
+                        return;
+                    }
+                    
+                    // Add loading state
+                    button.classList.add('loading');
+                    button.disabled = true;
+                    
+                    try {
+                        // Simulate API call
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        showNotification('Login successful! Redirecting to dashboard...', 'success');
+                        
+                        // TODO: Replace with actual API call and redirect
+                        // const response = await fetch('/api/auth/login', {
+                        //     method: 'POST',
+                        //     headers: { 'Content-Type': 'application/json' },
+                        //     body: JSON.stringify({ email, password })
+                        // });
+                        
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                        
+                    } catch (error) {
+                        showNotification('Login failed. Please check your credentials.', 'error');
+                        console.error('Login error:', error);
+                    } finally {
+                        button.classList.remove('loading');
+                        button.disabled = false;
+                    }
+                });
+            }
+        }
+
+        // Enhanced notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    z-index: 10000;
+                    max-width: 400px;
+                    animation: slideIn 0.3s ease;
+                ">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                            background: none;
+                            border: none;
+                            color: white;
+                            font-size: 18px;
+                            cursor: pointer;
+                            margin-left: auto;
+                        ">&times;</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }        // Enhanced download handling
+        function setupDownloadHandlers() {
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const platform = this.getAttribute('data-platform');
+                    handleDownload(platform);
+                });
+            });
+        }
+
+        async function handleDownload(platform) {
+            const downloadUrls = {
+                windows: '#', // Replace with actual download URL
+                macos: '#',   // Replace with actual download URL  
+                android: '#', // Replace with actual download URL
+                ios: '#',     // Replace with actual download URL
+                linux: '#'    // Replace with actual download URL
+            };
+
+            const platformNames = {
+                windows: 'Windows Clash Client',
+                macos: 'macOS Singbox Client',
+                android: 'Android VPN App',
+                ios: 'iOS VPN App',
+                linux: 'Linux VPN Client'
+            };
+
+            try {
+                showNotification(`Preparing ${platformNames[platform]} download...`, 'info');
+                
+                // Simulate download preparation
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // In a real implementation, you would:
+                // 1. Check user subscription status
+                // 2. Generate download link with auth token
+                // 3. Track download analytics
+                
+                showNotification(`${platformNames[platform]} download started! Check your downloads folder.`, 'success');
+                
+                // TODO: Replace with actual download logic
+                // window.open(downloadUrls[platform], '_blank');
+                
+            } catch (error) {
+                showNotification('Download failed. Please try again later.', 'error');
+                console.error('Download error:', error);
+            }
+        }        // Mobile menu toggle functionality
+        function setupMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                
+                // Close menu when clicking on links
+                navMenu.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFormHandlers();
+            setupSmoothScrolling();
+            setupDownloadHandlers();
+            setupMobileMenu();
+            
+            // Add CSS for animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            console.log('SecureVPN website initialized successfully!');
+        });
+
+        // Add window resize handler for responsive behavior
+        window.addEventListener('resize', function() {
+            // Close mobile menu on resize to desktop
+            if (window.innerWidth > 768) {
+                const hamburger = document.getElementById('hamburger');
+                const navMenu = document.getElementById('nav-menu');
+                if (hamburger && navMenu) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            }
+        });
+    </script>
+    
+    <!-- External JavaScript file -->
+    <script src="../scr/js/main.js"></script>
+</body>
+</html>
