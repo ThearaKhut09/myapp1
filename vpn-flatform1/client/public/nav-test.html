@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test - VPN Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-link { display: block; margin: 10px 0; padding: 10px; background: #f0f0f0; text-decoration: none; color: #333; border-radius: 5px; }
+        .test-link:hover { background: #e0e0e0; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 VPN Platform - Navigation Test Page</h1>
+    
+    <div class="section">
+        <h2>📍 Page Navigation Tests</h2>
+        <p>Click these links to test page navigation:</p>
+        
+        <a href="/" class="test-link">🏠 Home Page (/)</a>
+        <a href="/home" class="test-link">🏠 Home Alternative (/home)</a>
+        <a href="/login" class="test-link">🔐 Login Page (/login)</a>
+        <a href="/login.html" class="test-link">🔐 Login HTML (/login.html)</a>
+        <a href="/register" class="test-link">📝 Register Page (/register)</a>
+        <a href="/register.html" class="test-link">📝 Register HTML (/register.html)</a>
+        <a href="/dashboard" class="test-link">📊 Dashboard (/dashboard)</a>
+        <a href="/admin" class="test-link">⚙️ Admin Panel (/admin)</a>
+        <a href="/payment" class="test-link">💳 Payment Page (/payment)</a>
+        <a href="/docs" class="test-link">📖 API Documentation (/docs)</a>
+    </div>
+    
+    <div class="section">
+        <h2>🎯 Section Navigation Tests</h2>
+        <p>These should redirect to home page with anchors:</p>
+        
+        <a href="/features" class="test-link">✨ Features Section (/features)</a>
+        <a href="/pricing" class="test-link">💰 Pricing Section (/pricing)</a>
+        <a href="/servers" class="test-link">🌐 Servers Section (/servers)</a>
+        <a href="/support" class="test-link">🎧 Support Section (/support)</a>
+    </div>
+    
+    <div class="section">
+        <h2>🔗 API Tests</h2>
+        <p>API endpoints for testing:</p>
+        
+        <a href="/api/health" class="test-link">🏥 Health Check API (/api/health)</a>
+        <a href="/api/nonexistent" class="test-link">❌ Non-existent API (/api/nonexistent)</a>
+    </div>
+    
+    <div class="section">
+        <h2>🚫 404 Tests</h2>
+        <p>These should show 404 pages:</p>
+        
+        <a href="/nonexistent" class="test-link">❌ Non-existent Page (/nonexistent)</a>
+        <a href="/404" class="test-link">🚫 404 Page (/404)</a>
+    </div>
+    
+    <div class="section">
+        <h2>📱 Browser Navigation</h2>
+        <p>Use browser back/forward buttons to test navigation history.</p>
+        <p>Use browser refresh to test page reload functionality.</p>
+    </div>
+    
+    <script>
+        // Add click logging for debugging
+        document.querySelectorAll('.test-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                console.log('🔗 Clicking link:', this.href);
+                console.log('📍 Current URL:', window.location.href);
+            });
+        });
+        
+        // Log page load
+        console.log('🧪 Navigation test page loaded');
+        console.log('📍 Current URL:', window.location.href);
+    </script>
+</body>
+</html>

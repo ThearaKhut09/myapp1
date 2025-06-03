@@ -53,6 +53,31 @@ function initNavigation() {
         });
     }
 
+    // Handle navigation clicks with fallback
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // Handle different types of links
+            if (href.startsWith('#')) {
+                // Anchor link - scroll to section
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            } else if (href.endsWith('.html') || href.startsWith('/')) {
+                // Page navigation - let browser handle normally
+                // Don't prevent default for page navigation
+                console.log('Navigating to:', href);
+            }
+        });
+    });
+
     // Navbar scroll effect
     if (navbar) {
         window.addEventListener('scroll', function() {
@@ -240,12 +265,15 @@ function animateCounter(element, start, end, duration) {
 
 // Smooth scrolling functionality
 function setupSmoothScrolling() {
-    // Handle all anchor links for smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    // Handle only anchor links that point to elements on the current page
+    document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+            
+            // Only prevent default if target exists on current page
             if (target) {
+                e.preventDefault();
                 const offsetTop = target.offsetTop - 80; // Account for fixed navbar
                 window.scrollTo({
                     top: offsetTop,
