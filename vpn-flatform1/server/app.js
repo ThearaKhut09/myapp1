@@ -18,7 +18,7 @@ const dbManager = require('./database/manager');
 const { getDatabase } = require('./database/connection');
 
 // Services
-const websocketService = require('./services/websocket');
+const { WebSocketService } = require('./services/websocket');
 const analytics = require('./services/analytics');
 const connectionMonitor = require('./services/connectionMonitor');
 const notifications = require('./services/notifications');
@@ -74,13 +74,13 @@ async function initializeServices() {
 }
 
 // Initialize WebSocket service
-websocketService.initialize(server);
+const websocketService = new WebSocketService(server);
 
 // Enhanced logging middleware
 app.use(logger.middleware());
 
 // Enhanced security middleware
-app.use(security.middleware());
+security.middleware().forEach(middleware => app.use(middleware));
 
 // CORS configuration
 const corsOptions = {

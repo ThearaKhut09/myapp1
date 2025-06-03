@@ -169,7 +169,19 @@ const bruteForceProtection = (req, res, next) => {
     next();
 };
 
+// Combined security middleware function
+const middleware = () => {
+    return [
+        securityHeaders,
+        createRateLimit(),
+        requestSizeLimit(10 * 1024 * 1024), // 10MB limit
+        bruteForceProtection,
+        honeypot
+    ];
+};
+
 module.exports = {
+    middleware,
     createRateLimit,
     ipFilter,
     requestSizeLimit,

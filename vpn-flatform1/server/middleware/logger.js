@@ -2,10 +2,16 @@
 const fs = require('fs');
 const path = require('path');
 
-// Create logs directory if it doesn't exist
-const logsDir = path.join(__dirname, '../logs');
-if (!fs.existsSync(logsDir)) {
-    fs.mkdirSync(logsDir, { recursive: true });
+// Create logs directory if it doesn't exist (skip in test environment)
+let logsDir;
+if (process.env.NODE_ENV !== 'test') {
+    logsDir = path.join(__dirname, '../logs');
+    if (!fs.existsSync(logsDir)) {
+        fs.mkdirSync(logsDir, { recursive: true });
+    }
+} else {
+    // Use temporary directory for tests
+    logsDir = path.join(__dirname, '../tmp');
 }
 
 // Log levels
@@ -29,9 +35,11 @@ class Logger {
             meta,
             pid: process.pid
         }) + '\n';
-    }
-
-    writeToFile(filename, content) {
+    }    writeToFile(filename, content) {
+        // Skip file writing in test environment
+        if (process.env.NODE_ENV === 'test') {
+            return;
+        }
         const filepath = path.join(logsDir, filename);
         fs.appendFileSync(filepath, content);
     }
@@ -94,4 +102,8 @@ const requestLogger = (req, res, next) => {
     next();
 };
 
-module.exports = { Logger, requestLogger };
+module.exports = { 
+    Logger, 
+    requestLogger,
+    middleware: () => requestLogger // Add middleware function for backward compatibility
+};

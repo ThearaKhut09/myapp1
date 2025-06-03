@@ -113,8 +113,7 @@
     "*.{json,md}": [
       "prettier --write"
     ]
-  },
-  "jest": {
+  },  "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "server/**/*.js",
@@ -126,13 +125,11 @@
       "text",
       "lcov",
       "html"
-    ],
-    "testMatch": [
+    ],    "testMatch": [
       "**/tests/**/*.test.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setup.js"
-    ]
+    ],    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/server/$1"
+    }
   },
   "eslintConfig": {
     "env": {
