@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Platform API Documentation</title>
+    <link rel="stylesheet" href="../client/css/api-docs.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>VPN Platform API</h2>
+                <p class="version">v1.0.0</p>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search endpoints..." class="search-input">
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="#overview" class="nav-link active">Overview</a></li>
+                <li><a href="#authentication" class="nav-link">Authentication</a></li>
+                <li><a href="#vpn-endpoints" class="nav-link">VPN Endpoints</a></li>
+                <li><a href="#payment-endpoints" class="nav-link">Payment</a></li>
+                <li><a href="#admin-endpoints" class="nav-link">Admin</a></li>
+                <li><a href="#websocket" class="nav-link">WebSocket</a></li>
+                <li><a href="#errors" class="nav-link">Error Codes</a></li>
+                <li><a href="#examples" class="nav-link">Examples</a></li>
+            </ul>
+            
+            <div class="api-tester-toggle">
+                <button id="toggleTester" class="btn-secondary">Open API Tester</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <h1>VPN Platform API Documentation</h1>
+                <p class="lead">RESTful API for the VPN Platform with comprehensive endpoints for authentication, VPN management, payments, and administration.</p>
+                
+                <div class="info-cards">
+                    <div class="info-card">
+                        <h3>Base URL</h3>
+                        <code>http://localhost:3000/api</code>
+                    </div>
+                    <div class="info-card">
+                        <h3>Authentication</h3>
+                        <p>JWT Bearer Token</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Response Format</h3>
+                        <p>JSON</p>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+                    <h3>Standard Response Format</h3>
+                    <pre><code class="language-json">{
+  "success": true,
+  "message": "Operation completed successfully",
+  "data": {},
+  "error": null
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Authentication Section -->
+            <section id="authentication" class="section">
+                <h2>Authentication Endpoints</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="path">/auth/register</span>
+                        <span class="description">Register a new user</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="request-section">
+                            <h4>Request Body</h4>
+                            <pre><code class="language-json">{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}</code></pre>
+                        </div>
+                        
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "user": {
+      "id": 1,
+      "username": "john_doe",
+      "email": "john@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="auth/register" data-method="POST">Try it out</button>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="path">/auth/login</span>
+                        <span class="description">Authenticate user</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="request-section">
+                            <h4>Request Body</h4>
+                            <pre><code class="language-json">{
+  "email": "john@example.com",
+  "password": "securePassword123"
+}</code></pre>
+                        </div>
+                        
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": 1,
+      "username": "john_doe",
+      "email": "john@example.com"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="auth/login" data-method="POST">Try it out</button>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="path">/auth/profile</span>
+                        <span class="description">Get user profile</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "user": {
+      "id": 1,
+      "username": "john_doe",
+      "email": "john@example.com",
+      "subscription_status": "active",
+      "created_at": "2025-06-03T10:00:00Z"
+    }
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="auth/profile" data-method="GET" data-auth="true">Try it out</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VPN Endpoints Section -->
+            <section id="vpn-endpoints" class="section">
+                <h2>VPN Connection Endpoints</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="path">/vpn/servers</span>
+                        <span class="description">Get available VPN servers</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="parameters-section">
+                            <h4>Query Parameters</h4>
+                            <table class="params-table">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                                <tr>
+                                    <td>location</td>
+                                    <td>string</td>
+                                    <td>Filter by country/region</td>
+                                </tr>
+                                <tr>
+                                    <td>status</td>
+                                    <td>string</td>
+                                    <td>Filter by server status</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "servers": [
+      {
+        "id": 1,
+        "name": "US East 1",
+        "location": "New York, USA",
+        "ip": "192.168.1.1",
+        "port": 1194,
+        "protocol": "OpenVPN",
+        "load": 45,
+        "status": "active",
+        "ping": 23
+      }
+    ]
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="vpn/servers" data-method="GET" data-auth="true">Try it out</button>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="path">/vpn/connect</span>
+                        <span class="description">Connect to VPN server</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="request-section">
+                            <h4>Request Body</h4>
+                            <pre><code class="language-json">{
+  "server_id": 1,
+  "protocol": "OpenVPN"
+}</code></pre>
+                        </div>
+                        
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "message": "Connected to VPN server",
+  "data": {
+    "connection": {
+      "id": "conn-123",
+      "server_id": 1,
+      "server_name": "US East 1",
+      "connected_at": "2025-06-03T12:00:00Z",
+      "status": "connected"
+    }
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="vpn/connect" data-method="POST" data-auth="true">Try it out</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Endpoints Section -->
+            <section id="payment-endpoints" class="section">
+                <h2>Payment Endpoints</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="path">/payment/plans</span>
+                        <span class="description">Get subscription plans</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="response-section">
+                            <h4>Response</h4>
+                            <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "plans": [
+      {
+        "id": "monthly",
+        "name": "Monthly Plan",
+        "price": 9.99,
+        "currency": "USD",
+        "duration": "1 month",
+        "features": ["Unlimited bandwidth", "50+ servers"]
+      }
+    ]
+  }
+}</code></pre>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="payment/plans" data-method="GET">Try it out</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Endpoints Section -->
+            <section id="admin-endpoints" class="section">
+                <h2>Admin Endpoints</h2>
+                <p class="admin-note">⚠️ These endpoints require admin privileges</p>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="path">/admin/users</span>
+                        <span class="description">Get all users</span>
+                        <span class="auth-required">👑 Admin Required</span>
+                    </div>
+                    
+                    <div class="endpoint-body">
+                        <div class="parameters-section">
+                            <h4>Query Parameters</h4>
+                            <table class="params-table">
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                                <tr>
+                                    <td>page</td>
+                                    <td>integer</td>
+                                    <td>Page number (default: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td>limit</td>
+                                    <td>integer</td>
+                                    <td>Items per page (default: 20)</td>
+                                </tr>
+                                <tr>
+                                    <td>search</td>
+                                    <td>string</td>
+                                    <td>Search by username or email</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <button class="try-it-btn" data-endpoint="admin/users" data-method="GET" data-auth="true" data-admin="true">Try it out</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WebSocket Section -->
+            <section id="websocket" class="section">
+                <h2>WebSocket Events</h2>
+                
+                <div class="websocket-info">
+                    <h3>Connection</h3>
+                    <code>ws://localhost:3000</code>
+                    
+                    <h3>Client Events</h3>
+                    <ul class="event-list">
+                        <li><strong>join_room</strong> - Join a room for updates</li>
+                        <li><strong>leave_room</strong> - Leave a room</li>
+                        <li><strong>admin_command</strong> - Send admin commands</li>
+                    </ul>
+                    
+                    <h3>Server Events</h3>
+                    <ul class="event-list">
+                        <li><strong>connection_update</strong> - Real-time connection updates</li>
+                        <li><strong>server_status</strong> - Server status changes</li>
+                        <li><strong>user_notification</strong> - User notifications</li>
+                    </ul>
+                </div>
+                
+                <div class="websocket-tester">
+                    <h3>WebSocket Tester</h3>
+                    <button id="wsConnect" class="btn-primary">Connect</button>
+                    <button id="wsDisconnect" class="btn-secondary" disabled>Disconnect</button>
+                    <div id="wsStatus" class="ws-status">Disconnected</div>
+                    <textarea id="wsMessages" class="ws-messages" readonly></textarea>
+                </div>
+            </section>
+
+            <!-- Error Codes Section -->
+            <section id="errors" class="section">
+                <h2>Error Codes</h2>
+                
+                <table class="error-table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Status</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>400</td>
+                            <td>Bad Request</td>
+                            <td>Invalid input data or malformed request</td>
+                        </tr>
+                        <tr>
+                            <td>401</td>
+                            <td>Unauthorized</td>
+                            <td>Invalid or missing authentication token</td>
+                        </tr>
+                        <tr>
+                            <td>403</td>
+                            <td>Forbidden</td>
+                            <td>Insufficient permissions for this operation</td>
+                        </tr>
+                        <tr>
+                            <td>404</td>
+                            <td>Not Found</td>
+                            <td>Requested resource not found</td>
+                        </tr>
+                        <tr>
+                            <td>429</td>
+                            <td>Too Many Requests</td>
+                            <td>Rate limit exceeded</td>
+                        </tr>
+                        <tr>
+                            <td>500</td>
+                            <td>Internal Server Error</td>
+                            <td>Unexpected server error occurred</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Examples Section -->
+            <section id="examples" class="section">
+                <h2>Code Examples</h2>
+                
+                <div class="example-tabs">
+                    <button class="tab-button active" data-tab="javascript">JavaScript</button>
+                    <button class="tab-button" data-tab="curl">cURL</button>
+                    <button class="tab-button" data-tab="python">Python</button>
+                </div>
+                
+                <div class="example-content" id="javascript-example">
+                    <h3>JavaScript/Node.js</h3>
+                    <pre><code class="language-javascript">const axios = require('axios');
+
+// Login and get token
+async function login() {
+  const response = await axios.post('http://localhost:3000/api/auth/login', {
+    email: 'john@example.com',
+    password: 'password123'
+  });
+  
+  return response.data.data.token;
+}
+
+// Get VPN servers
+async function getServers(token) {
+  const response = await axios.get('http://localhost:3000/api/vpn/servers', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  
+  return response.data.data.servers;
+}
+
+// Usage
+const token = await login();
+const servers = await getServers(token);
+console.log(servers);</code></pre>
+                </div>
+                
+                <div class="example-content" id="curl-example" style="display: none;">
+                    <h3>cURL</h3>
+                    <pre><code class="language-bash"># Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"john@example.com","password":"password123"}'
+
+# Get servers (replace YOUR_TOKEN with actual token)
+curl -X GET http://localhost:3000/api/vpn/servers \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Connect to VPN server
+curl -X POST http://localhost:3000/api/vpn/connect \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"server_id":1,"protocol":"OpenVPN"}'</code></pre>
+                </div>
+                
+                <div class="example-content" id="python-example" style="display: none;">
+                    <h3>Python</h3>
+                    <pre><code class="language-python">import requests
+
+class VPNClient:
+    def __init__(self, base_url='http://localhost:3000/api'):
+        self.base_url = base_url
+        self.token = None
+    
+    def login(self, email, password):
+        response = requests.post(f'{self.base_url}/auth/login', json={
+            'email': email,
+            'password': password
+        })
+        data = response.json()
+        self.token = data['data']['token']
+        return self.token
+    
+    def get_servers(self):
+        headers = {'Authorization': f'Bearer {self.token}'}
+        response = requests.get(f'{self.base_url}/vpn/servers', headers=headers)
+        return response.json()['data']['servers']
+    
+    def connect_server(self, server_id, protocol='OpenVPN'):
+        headers = {'Authorization': f'Bearer {self.token}'}
+        response = requests.post(f'{self.base_url}/vpn/connect', 
+                               headers=headers,
+                               json={'server_id': server_id, 'protocol': protocol})
+        return response.json()
+
+# Usage
+client = VPNClient()
+client.login('john@example.com', 'password123')
+servers = client.get_servers()
+print(servers)</code></pre>
+                </div>
+            </section>
+        </main>
+
+        <!-- API Tester Modal -->
+        <div id="apiTesterModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>API Tester</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="tester-form">
+                        <div class="form-group">
+                            <label>Method</label>
+                            <select id="testerMethod">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Endpoint</label>
+                            <input type="text" id="testerEndpoint" placeholder="e.g., auth/login">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Authorization Token</label>
+                            <input type="text" id="testerToken" placeholder="Bearer token (optional)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Request Body (JSON)</label>
+                            <textarea id="testerBody" rows="6" placeholder='{"key": "value"}'></textarea>
+                        </div>
+                        
+                        <button id="sendRequest" class="btn-primary">Send Request</button>
+                    </div>
+                    
+                    <div class="tester-response">
+                        <h4>Response</h4>
+                        <div id="responseStatus" class="response-status"></div>
+                        <pre id="responseBody" class="response-body"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../client/js/api-docs.js"></script>
+</body>
+</html>

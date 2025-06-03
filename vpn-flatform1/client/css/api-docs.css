@@ -1,0 +1,667 @@
+/* API Documentation Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #3b82f6;
+    --secondary-color: #64748b;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --background: #0f172a;
+    --surface: #1e293b;
+    --surface-light: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header h2 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.version {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.search-container {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background: var(--surface-light);
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.api-tester-toggle {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--border);
+}
+
+/* Main Content */
+.content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+}
+
+.section {
+    display: none;
+    max-width: 1000px;
+}
+
+.section.active {
+    display: block;
+}
+
+.section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
+.lead {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Info Cards */
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-card {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+}
+
+.info-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.info-card code {
+    background: var(--surface-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+/* Code Examples */
+.code-example {
+    background: var(--surface);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.code-example h3 {
+    padding: 1rem 1.5rem;
+    background: var(--surface-light);
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.code-example pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+/* Endpoints */
+.endpoint {
+    background: var(--surface);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--surface-light);
+    border-bottom: 1px solid var(--border);
+}
+
+.method {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.method.get {
+    background: var(--success-color);
+    color: white;
+}
+
+.method.post {
+    background: var(--primary-color);
+    color: white;
+}
+
+.method.put {
+    background: var(--warning-color);
+    color: white;
+}
+
+.method.delete {
+    background: var(--danger-color);
+    color: white;
+}
+
+.path {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.description {
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.auth-required {
+    background: var(--warning-color);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.endpoint-body {
+    padding: 1.5rem;
+}
+
+.request-section,
+.response-section,
+.parameters-section {
+    margin-bottom: 1.5rem;
+}
+
+.request-section h4,
+.response-section h4,
+.parameters-section h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.request-section pre,
+.response-section pre {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+/* Parameters Table */
+.params-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.params-table th,
+.params-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.params-table th {
+    background: var(--surface-light);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.params-table td {
+    color: var(--text-secondary);
+}
+
+/* Try It Button */
+.try-it-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.try-it-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* WebSocket Section */
+.websocket-info {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+}
+
+.websocket-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.event-list {
+    list-style: none;
+    margin: 1rem 0;
+}
+
+.event-list li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.event-list strong {
+    color: var(--text-primary);
+}
+
+.websocket-tester {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+}
+
+.websocket-tester h3 {
+    margin-bottom: 1rem;
+}
+
+.ws-status {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.ws-status.connected {
+    background: var(--success-color);
+    color: white;
+}
+
+.ws-status.disconnected {
+    background: var(--danger-color);
+    color: white;
+}
+
+.ws-messages {
+    width: 100%;
+    height: 200px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    resize: vertical;
+}
+
+/* Error Table */
+.error-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.error-table th,
+.error-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.error-table th {
+    background: var(--surface-light);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.error-table td {
+    color: var(--text-secondary);
+}
+
+.error-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Example Tabs */
+.example-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: 0.5rem 0.5rem 0 0;
+    transition: all 0.2s;
+}
+
+.tab-button.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.example-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 0.5rem 0.5rem 0.5rem;
+    padding: 1.5rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: var(--surface);
+    margin: 5% auto;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    color: var(--text-primary);
+}
+
+.close {
+    color: var(--text-muted);
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.tester-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+}
+
+.tester-response {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+}
+
+.response-status {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.response-status.success {
+    background: var(--success-color);
+    color: white;
+}
+
+.response-status.error {
+    background: var(--danger-color);
+    color: white;
+}
+
+.response-body {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.admin-note {
+    background: var(--warning-color);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .info-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .endpoint-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .example-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        border-radius: 0.5rem;
+    }
+    
+    .example-content {
+        border-radius: 0.5rem;
+    }
+}
+
+/* Syntax Highlighting Override */
+pre[class*="language-"] {
+    background: var(--background) !important;
+    border: 1px solid var(--border);
+}
+
+code[class*="language-"] {
+    color: var(--text-primary) !important;
+}

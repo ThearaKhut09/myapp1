@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SecureVPN</title>    <link rel="stylesheet" href="../css/admin-dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-dashboard">
+    <!-- Navigation -->
+    <nav class="navbar admin-navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>SecureVPN Admin</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#overview" class="nav-link active">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#users" class="nav-link">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#servers" class="nav-link">Servers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#system" class="nav-link">System</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="adminName">Admin</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#settings">Settings</a></li>
+                        <li><a href="#logs">Logs</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <h3>Quick Actions</h3>
+                    <button class="sidebar-btn" onclick="showAddUserModal()">
+                        <i class="fas fa-user-plus"></i> Add User
+                    </button>
+                    <button class="sidebar-btn" onclick="showAddServerModal()">
+                        <i class="fas fa-server"></i> Add Server
+                    </button>
+                    <button class="sidebar-btn" onclick="broadcastMessage()">
+                        <i class="fas fa-bullhorn"></i> Broadcast
+                    </button>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>System Status</h3>
+                    <div class="status-indicator">
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>Database</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>VPN Services</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot online"></span>
+                            <span>Payment Gateway</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-dot warning" id="wsStatus"></span>
+                            <span>WebSocket</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Real-time Stats</h3>
+                    <div class="realtime-stats">
+                        <div class="stat-item">
+                            <span class="stat-value" id="liveConnections">0</span>
+                            <span class="stat-label">Active Connections</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="liveUsers">0</span>
+                            <span class="stat-label">Online Users</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="liveRevenue">$0</span>
+                            <span class="stat-label">Today's Revenue</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <section class="admin-content">
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 id="totalUsers">1,250</h3>
+                            <p>Total Users</p>
+                            <span class="metric-change positive">+12% this month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 id="activeConnections">0</h3>
+                            <p>Active Connections</p>
+                            <span class="metric-change" id="connectionChange">Real-time</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 id="totalRevenue">$45,230</h3>
+                            <p>Monthly Revenue</p>
+                            <span class="metric-change positive">+8% vs last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 id="totalServers">15</h3>
+                            <p>Active Servers</p>
+                            <span class="metric-change neutral">3 regions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Connections Over Time</h3>
+                        <canvas id="connectionsChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Revenue Trend</h3>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-section">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Activity items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users" class="content-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <div class="section-actions">
+                        <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
+                        <select id="userStatusFilter" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="showAddUserModal()">
+                            <i class="fas fa-plus"></i> Add User
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Plan</th>
+                                <th>Status</th>
+                                <th>Join Date</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- User data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination" id="usersPagination">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </div>
+
+            <!-- Servers Section -->
+            <div id="servers" class="content-section">
+                <div class="section-header">
+                    <h2>Server Management</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" onclick="refreshServers()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddServerModal()">
+                            <i class="fas fa-plus"></i> Add Server
+                        </button>
+                    </div>
+                </div>
+
+                <div class="servers-grid" id="serversGrid">
+                    <!-- Server cards will be populated here -->
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analytics" class="content-section">
+                <div class="section-header">
+                    <h2>Analytics</h2>
+                    <div class="section-actions">
+                        <select id="analyticsTimeRange" class="filter-select">
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="analytics-dashboard">
+                    <div class="analytics-charts">
+                        <div class="chart-container">
+                            <h3>User Activity</h3>
+                            <canvas id="userActivityChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Protocol Usage</h3>
+                            <canvas id="protocolChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Geographic Distribution</h3>
+                            <canvas id="geoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Section -->
+            <div id="system" class="content-section">
+                <div class="section-header">
+                    <h2>System Monitoring</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" onclick="exportLogs()">
+                            <i class="fas fa-download"></i> Export Logs
+                        </button>
+                    </div>
+                </div>
+
+                <div class="system-grid">
+                    <div class="system-card">
+                        <h3>System Health</h3>
+                        <div class="health-indicators" id="healthIndicators">
+                            <!-- Health indicators will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="system-card">
+                        <h3>Performance Metrics</h3>
+                        <div class="performance-metrics" id="performanceMetrics">
+                            <!-- Performance metrics will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="system-card">
+                        <h3>Recent Logs</h3>
+                        <div class="logs-container" id="logsContainer">
+                            <!-- Logs will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="system-card">
+                        <h3>Alerts</h3>
+                        <div class="alerts-container" id="alertsContainer">
+                            <!-- Alerts will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- WebSocket Connection Status -->
+    <div class="ws-status" id="wsStatusIndicator">
+        <i class="fas fa-wifi"></i>
+        <span>Connecting...</span>
+    </div>
+
+    <!-- Scripts -->    <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

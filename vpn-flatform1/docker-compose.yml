@@ -1,0 +1,191 @@
+version: '3.8'
+
+services:
+  # VPN Platform Application
+  vpn-app:
+    build: .
+    container_name: vpn-platform
+    restart: unless-stopped
+    ports:
+      - "3000:3000"      # Web interface
+      - "1194:1194/udp"  # OpenVPN
+      - "51820:51820/udp" # WireGuard
+      - "500:500/udp"    # IKEv2
+      - "4500:4500/udp"  # IKEv2 NAT-T
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_USER=vpn_user
+      - DB_PASSWORD=secure_password_123
+      - DB_NAME=vpn_platform
+      - REDIS_HOST=redis
+      - JWT_SECRET=your-super-secure-jwt-secret-key-change-this-in-production
+      - ENCRYPTION_KEY=your-32-character-encryption-key
+    volumes:
+      - vpn_configs:/app/server/configs
+      - vpn_logs:/app/logs
+      - vpn_backups:/app/backups
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - vpn-network
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+    privileged: true
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: vpn-mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password_123
+      - MYSQL_DATABASE=vpn_platform
+      - MYSQL_USER=vpn_user
+      - MYSQL_PASSWORD=secure_password_123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - vpn-network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: vpn-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass redis_password_123
+    volumes:
+      - redis_data:/data
+    networks:
+      - vpn-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: vpn-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/ssl:/etc/nginx/ssl
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - vpn-app
+    networks:
+      - vpn-network
+
+  # Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: vpn-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - vpn-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: vpn-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin_password_123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana:/etc/grafana/provisioning
+    networks:
+      - vpn-network
+
+  # Log Management with ELK Stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: vpn-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - vpn-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.8.0
+    container_name: vpn-logstash
+    restart: unless-stopped
+    volumes:
+      - ./docker/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - vpn_logs:/app/logs:ro
+    depends_on:
+      - elasticsearch
+    networks:
+      - vpn-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: vpn-kibana
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - vpn-network
+
+  # Backup Service
+  backup:
+    image: alpine:latest
+    container_name: vpn-backup
+    restart: unless-stopped
+    volumes:
+      - mysql_data:/backup/mysql:ro
+      - vpn_configs:/backup/configs:ro
+      - vpn_backups:/backup/output
+      - ./docker/backup.sh:/backup.sh
+    command: sh -c "chmod +x /backup.sh && crond -f -d 8"
+    networks:
+      - vpn-network
+
+networks:
+  vpn-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  mysql_data:
+  redis_data:
+  vpn_configs:
+  vpn_logs:
+  vpn_backups:
+  nginx_logs:
+  prometheus_data:
+  grafana_data:
+  elasticsearch_data:
