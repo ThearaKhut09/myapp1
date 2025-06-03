@@ -38,8 +38,8 @@ const PORT = process.env.PORT || 3000;
 // Initialize services
 async function initializeServices() {
     try {
-        // Initialize database
-        await dbManager.initialize();
+        // Initialize database (already happens in constructor, just verify connection)
+        await dbManager.healthCheck();
         logger.info('Database initialized successfully');
 
         // Initialize analytics

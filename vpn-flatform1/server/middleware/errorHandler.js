@@ -1,7 +1,8 @@
 // Enhanced Error Handling System
 const fs = require('fs');
 const path = require('path');
-const logger = require('./logger');
+const { Logger } = require('./logger');
+const logger = new Logger();
 
 class ErrorHandler {
     constructor() {
