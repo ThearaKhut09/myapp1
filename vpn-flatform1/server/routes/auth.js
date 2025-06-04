@@ -63,15 +63,15 @@ const validateInput = (data) => {
 };
 
 // Generate tokens
-const generateTokens = (userId, email) => {
+const generateTokens = (userId, email, role) => {
     const accessToken = jwt.sign(
-        { userId, email },
+        { userId, email, role },
         JWT_SECRET,
         { expiresIn: '15m' }
     );
 
     const refreshToken = jwt.sign(
-        { userId, email },
+        { userId, email, role },
         REFRESH_SECRET,
         { expiresIn: '7d' }
     );
@@ -203,10 +203,8 @@ router.post('/login', authLimiter, async (req, res) => {
 
         if (!isValidPassword) {
             return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        // Generate tokens
-        const { accessToken, refreshToken } = generateTokens(user.id, user.email);
+        }        // Generate tokens
+        const { accessToken, refreshToken } = generateTokens(user.id, user.email, user.role);
         refreshTokens.add(refreshToken);
 
         // Update last login in database
@@ -247,15 +245,24 @@ router.post('/refresh', (req, res) => {
 
         if (!refreshTokens.has(refreshToken)) {
             return res.status(403).json({ error: 'Invalid refresh token' });
-        }
-
-        jwt.verify(refreshToken, REFRESH_SECRET, (err, decoded) => {
+        }        jwt.verify(refreshToken, REFRESH_SECRET, async (err, decoded) => {
             if (err) {
                 refreshTokens.delete(refreshToken);
                 return res.status(403).json({ error: 'Invalid or expired refresh token' });
             }
 
-            const { accessToken, refreshToken: newRefreshToken } = generateTokens(decoded.userId, decoded.email);
+            // Get user's current role from database
+            const user = await dbManager.get(
+                'SELECT role FROM users WHERE id = ?', 
+                [decoded.userId]
+            );
+
+            if (!user) {
+                refreshTokens.delete(refreshToken);
+                return res.status(403).json({ error: 'User not found' });
+            }
+
+            const { accessToken, refreshToken: newRefreshToken } = generateTokens(decoded.userId, decoded.email, user.role);
             
             // Replace old refresh token
             refreshTokens.delete(refreshToken);

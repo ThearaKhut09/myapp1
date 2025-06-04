@@ -37,21 +37,18 @@ class DatabaseManager {
         }
     }    /**
      * Create database connection pool
-     */
-    async connect() {
+     */    async connect() {
         try {
             // First try to connect to the database
             this.pool = mysql.createPool({
-                host: process.env.DB_HOST || 'localhost',
+                host: process.env.DB_HOST || '127.0.0.1',
                 port: process.env.DB_PORT || 3306,
                 user: process.env.DB_USER || 'root',
-                password: process.env.DB_PASSWORD || '',
+                password: process.env.DB_PASSWORD || 'Theara1234#@',
                 database: process.env.DB_NAME || 'vpn_platform',
                 waitForConnections: true,
                 connectionLimit: 10,
-                queueLimit: 0,
-                acquireTimeout: 60000,
-                timeout: 60000
+                queueLimit: 0
             });
 
             // Test the connection
@@ -75,9 +72,8 @@ class DatabaseManager {
      * Create database if it doesn't exist
      */
     async createDatabase() {
-        try {
-            const tempPool = mysql.createPool({
-                host: process.env.DB_HOST || 'localhost',
+        try {            const tempPool = mysql.createPool({
+                host: process.env.DB_HOST || '127.0.0.1',
                 port: process.env.DB_PORT || 3306,
                 user: process.env.DB_USER || 'root',
                 password: process.env.DB_PASSWORD || 'Theara1234#@'

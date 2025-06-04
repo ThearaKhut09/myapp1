@@ -30,11 +30,13 @@ async function startServer() {
         app.use(express.json());
         app.use(express.static(path.join(__dirname, '../client')));
         app.use('/public', express.static(path.join(__dirname, '../client/public')));
-        app.use('/scr', express.static(path.join(__dirname, '../client/scr')));
-
-        // Add auth routes
+        app.use('/scr', express.static(path.join(__dirname, '../client/scr')));        // Add auth routes
         const authRoutes = require('./routes/auth');
         app.use('/api', authRoutes);
+
+        // Add admin routes
+        const adminRoutes = require('./routes/admin');
+        app.use('/api/admin', adminRoutes);
 
         // HTML page routes
 app.get('/', (req, res) => {

@@ -4,7 +4,7 @@ async function testAdminLogin() {
     try {
         console.log('Testing admin login...');
         
-        const response = await axios.post('http://localhost:3000/api/auth/login', {
+        const response = await axios.post('http://localhost:3001/api/login', {
             email: 'admin@vpn.com',
             password: 'admin123'
         });
@@ -14,7 +14,7 @@ async function testAdminLogin() {
         
         // Test accessing admin dashboard
         const token = response.data.token;
-        const dashboardResponse = await axios.get('http://localhost:3000/api/admin/dashboard', {
+        const dashboardResponse = await axios.get('http://localhost:3001/api/admin/dashboard', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
