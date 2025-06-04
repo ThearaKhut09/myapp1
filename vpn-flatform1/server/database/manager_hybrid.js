@@ -101,6 +101,55 @@ class DatabaseManager {
     }
 
     /**
+     * Get a single row from database
+     */
+    async get(sql, params = []) {
+        if (this.isMySQL) {
+            const [rows] = await this.pool.execute(sql, params);
+            return rows[0] || null;
+        } else {
+            return new Promise((resolve, reject) => {
+                this.sqliteDb.get(sql, params, (err, row) => {
+                    if (err) reject(err);
+                    else resolve(row || null);
+                });
+            });
+        }
+    }
+
+    /**
+     * Execute a query that modifies data (INSERT, UPDATE, DELETE)
+     */
+    async run(sql, params = []) {
+        if (this.isMySQL) {
+            const [result] = await this.pool.execute(sql, params);
+            return { 
+                id: result.insertId, 
+                changes: result.affectedRows,
+                lastInsertRowid: result.insertId
+            };
+        } else {
+            return new Promise((resolve, reject) => {
+                this.sqliteDb.run(sql, params, function(err) {
+                    if (err) reject(err);
+                    else resolve({ 
+                        id: this.lastID, 
+                        changes: this.changes,
+                        lastInsertRowid: this.lastID
+                    });
+                });
+            });
+        }
+    }
+
+    /**
+     * Get all rows from database  
+     */
+    async all(sql, params = []) {
+        return await this.query(sql, params);
+    }
+
+    /**
      * Create tables based on database type
      */
     async createTables() {

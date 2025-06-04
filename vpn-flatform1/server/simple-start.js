@@ -164,23 +164,30 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Catch-all handler for unknown routes
-app.get('*', (req, res) => {
-    // If it looks like an API request, return JSON 404
-    if (req.path.startsWith('/api/')) {
-        res.status(404).json({ error: 'API endpoint not found', path: req.path });
-    } else {
-        // For HTML requests, show 404 page or redirect to home
-        res.status(404).sendFile(path.join(__dirname, '../client/public/404.html'));
+        // Catch-all handler for unknown routes
+        app.get('*', (req, res) => {
+            // If it looks like an API request, return JSON 404
+            if (req.path.startsWith('/api/')) {
+                res.status(404).json({ error: 'API endpoint not found', path: req.path });
+            } else {
+                // For HTML requests, show 404 page or redirect to home
+                res.status(404).sendFile(path.join(__dirname, '../client/public/404.html'));
+            }
+        });
+
+        // Start server
+        app.listen(PORT, () => {
+            console.log(`✅ VPN Platform Server started successfully`);
+            console.log(`🌐 Server URL: http://localhost:${PORT}`);
+            console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
+            console.log(`📖 API Documentation: http://localhost:${PORT}/docs`);
+        });
+        
+    } catch (error) {
+        console.error('❌ Server startup failed:', error);
+        process.exit(1);
     }
-});
+}
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`✅ VPN Platform Server started successfully`);
-    console.log(`🌐 Server URL: http://localhost:${PORT}`);
-    console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
-    console.log(`📖 API Documentation: http://localhost:${PORT}/docs`);
-});
-
-console.log('Starting server...');
+// Start the server
+startServer();
