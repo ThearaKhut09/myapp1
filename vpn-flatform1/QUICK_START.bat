@@ -62,7 +62,7 @@ echo.
 echo  🔄 Step 4/4: Starting server...
 echo.
 echo  🌐 Server URLs:
-echo     🏠 Main Site: http://localhost:3001
+echo     🏠 Main Site: http://localhost:3001y
 echo     👤 Login: http://localhost:3001/login  
 echo     📊 Admin: http://localhost:3001/admin
 echo     🔑 Default Admin: admin@admin.com / admin
